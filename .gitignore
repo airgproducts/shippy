@@ -1,2 +1,10 @@
-__pycache__
-*.pyc
+# for jetbrains IDE's
+.idea/
+
+# temporary files
+temp/
+
+# env variables
+.env
+
+.pytest_cache/**
