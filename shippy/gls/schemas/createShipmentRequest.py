@@ -29,7 +29,7 @@ class Address(BaseModel):
         return cls(
             Name1=address.name,
             CountryCode=address.countryCode,
-            Province=address.province,
+            Province=address.provinceCode,
             ZIPCode=address.zipcode,
             City=address.city,
             Street=address.address1,

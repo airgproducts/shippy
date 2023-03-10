@@ -4,8 +4,14 @@ from shippy.base.client import BaseClient
 from shippy.base.schemas import Shipment
 
 from .config import Config
-from .requests import create_shipment
-from .schemas import CreateShipmentRequest, CreateShipmentResponse, ServiceCodeEnum
+from .requests import create_shipment, rate_shipment
+from .schemas import (
+    CreateShipmentRequest,
+    CreateShipmentResponse,
+    RateShipmentRequest,
+    RateShipmentResponse,
+    ServiceCodeEnum,
+)
 
 
 class Client(BaseClient):
@@ -42,3 +48,18 @@ class Client(BaseClient):
             schema=schema,
         )
         return CreateShipmentResponse(data=response.json())
+
+    def rate(self, shipment: Shipment) -> RateShipmentResponse:
+        schema = RateShipmentRequest.from_generic_schemas(
+            parcel=shipment.parcel,
+            to_address=shipment.to_address,
+            from_address=shipment.from_address,
+        )
+        response = rate_shipment(
+            base_url=self.config.base_url,
+            headers=self.headers,
+            auth=self.config.auth,
+            schema=schema,
+            request_option="Shop",
+        )
+        return RateShipmentResponse(data=response.json())
