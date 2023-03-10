@@ -14,7 +14,7 @@ class Address(BaseModel):
     contactName: str
     zipcode: str
     city: str
-    province: str | None = None
+    provinceCode: str | None = None
     countryCode: str
     email: str | None = None
     phone: str

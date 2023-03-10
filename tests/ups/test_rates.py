@@ -1,11 +1,9 @@
 from shippy import UPSClient
 from shippy.base.schemas import Parcel, Shipment
-from shippy.ups.schemas import ServiceCodeEnum
 
 
 def test_create_shipment(austrian_address_1, german_address_1):
     ups_client = UPSClient()
-
     parcel = Parcel(weight=10, unit_weight="KGS", volume=1, unit_volume="L")
     shipment_reference = "shipment 0815"
     shipment = Shipment(
@@ -15,7 +13,5 @@ def test_create_shipment(austrian_address_1, german_address_1):
         reference=shipment_reference,
     )
 
-    result = ups_client.ship(shipment, ServiceCodeEnum.UPS_STANDARD)
+    result = ups_client.rate(shipment)
     assert result
-    assert result.tracking_id.startswith("1Z")
-    assert result.label_as_bytes.startswith(b"GIF")
