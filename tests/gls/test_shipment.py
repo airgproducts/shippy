@@ -32,4 +32,4 @@ def test_cancel_parcel(austrian_address_1, austrian_address_2):
     result = gls_client.ship(shipment)
 
     response = gls_client.cancel_shipment(result.tracking_id)
-    assert response.TrackID == result.tracking_id
+    assert response.data.TrackID == result.tracking_id

@@ -1,9 +1,21 @@
+from datetime import datetime
+
 from shippy.base.client import BaseClient
 from shippy.base.schemas import Shipment
 
 from .config import Config
-from .requests import cancel_parcel_by_id_f116, create_parcels_f114
-from .schemas import CancelShipmentResponse, CreateShipmentRequest, CreateShipmentResponse
+from .requests import (
+    cancel_parcel_by_id_f116,
+    create_parcels_f114,
+    get_estimated_delivery_days_f234,
+)
+from .schemas import (
+    CancelShipmentResponse,
+    CreateShipmentRequest,
+    CreateShipmentResponse,
+    RateShipmentRequest,
+    RateShipmentResponse,
+)
 
 
 class Client(BaseClient):
@@ -35,11 +47,24 @@ class Client(BaseClient):
         )
         return CreateShipmentResponse(data=response.json())
 
-    def cancel_shipment(self, tracking_id: str):
+    def rate(self, shipment: Shipment) -> RateShipmentResponse:
+        schema = RateShipmentRequest.from_generic_schema(
+            from_address=shipment.from_address, to_address=shipment.to_address
+        )
+        request_date = datetime.now()
+        response = get_estimated_delivery_days_f234(
+            base_url=self.config.base_url,
+            headers=self.headers,
+            auth=self.config.auth,
+            schema=schema,
+        )
+        return RateShipmentResponse(data=response.json(), requested_at=request_date)
+
+    def cancel_shipment(self, tracking_id: str) -> CancelShipmentResponse:
         response = cancel_parcel_by_id_f116(
             base_url=self.config.base_url,
             headers=self.headers,
             auth=self.config.auth,
             parcel_id=tracking_id,
         )
-        return CancelShipmentResponse(**response.json())
+        return CancelShipmentResponse(data=response.json())
