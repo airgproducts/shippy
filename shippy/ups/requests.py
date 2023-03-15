@@ -1,9 +1,13 @@
+from typing import Literal
+
 import requests
 from pydantic import HttpUrl
 from requests import Response
 from requests.auth import HTTPBasicAuth
 
-from .schemas import CreateShipmentRequest
+from .schemas import CreateShipmentRequest, RateShipmentRequest
+
+_REQUEST_OPTION_CHOICES = Literal["Rate", "Shop"]
 
 
 def handle_ups_response(response: Response) -> Response:
@@ -21,6 +25,23 @@ def create_shipment(
     schema: CreateShipmentRequest,
 ):
     sub_url = "/shipments"
+    response = requests.post(
+        base_url + sub_url,
+        headers=headers,
+        json=schema.dict(exclude_none=True),
+        auth=auth,
+    )
+    return handle_ups_response(response)
+
+
+def rate_shipment(
+    base_url: HttpUrl,
+    headers: dict[str, str],
+    auth: HTTPBasicAuth,
+    schema: RateShipmentRequest,
+    request_option: _REQUEST_OPTION_CHOICES,
+):
+    sub_url = f"/rating/{request_option}"
     response = requests.post(
         base_url + sub_url,
         headers=headers,

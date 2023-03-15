@@ -1,2 +1,5 @@
-from .createShipmentRequest import CreateShipmentRequest, ServiceCodeEnum
+from .base import ServiceCodeEnum
+from .createShipmentRequest import CreateShipmentRequest
 from .createShipmentResponse import CreateShipmentResponse
+from .rateShipmentRequest import RateShipmentRequest
+from .rateShipmentResponse import RateShipmentResponse

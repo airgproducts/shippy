@@ -3,15 +3,17 @@ from pydantic import HttpUrl
 from requests import Response
 from requests.auth import HTTPBasicAuth
 
-from .schemas import CreateShipmentRequest
+from .schemas import CreateShipmentRequest, RateShipmentRequest
 
 
 def handle_gls_response(response: Response, error_message: str) -> Response:
     if response.status_code != 200:
         try:
-            message = response.headers["message"]
+            message = str(response.headers["message"])
         except KeyError:
-            message = response.headers
+            message = str(response.headers)
+        if response.text:
+            message += " " + response.text
         raise ValueError(f"{error_message} {response.status_code}: {message}")
     return response
 
@@ -47,3 +49,20 @@ def cancel_parcel_by_id_f116(
         auth=auth,
     )
     return handle_gls_response(response, "GLS cancel shipment request failed with")
+
+
+def get_estimated_delivery_days_f234(
+    base_url: HttpUrl,
+    headers: dict[str, str],
+    auth: HTTPBasicAuth,
+    schema: RateShipmentRequest,
+):
+    # https://shipit.gls-group.eu/webservices/3_2_9/doxygen/WS-REST-API/rest_timeframe.html#REST_API_REST_TF_1
+    sub_url = f"/timeframe/deliverydays"
+    response = requests.post(
+        base_url + sub_url,
+        headers=headers,
+        json=schema.dict(exclude_none=True),
+        auth=auth,
+    )
+    return handle_gls_response(response, "GLS get estimated delivery days failed with")

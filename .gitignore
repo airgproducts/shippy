@@ -5,6 +5,7 @@
 temp/
 
 # env variables
-.env
+.env**
+!.env.example
 
 .pytest_cache/**
