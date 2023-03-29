@@ -27,3 +27,12 @@ class CreateShipmentResponseBase(GenericModel, Generic[DataType], ABC):
     @property
     def label_as_string(self) -> str:
         return self._label
+
+
+class CancelShipmentResponseBase(GenericModel, Generic[DataType], ABC):
+    data: DataType
+
+    @property
+    @abstractmethod
+    def cancellation_successful(self) -> bool:
+        raise NotImplementedError()

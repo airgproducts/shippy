@@ -4,8 +4,9 @@ from shippy.base.client import BaseClient
 from shippy.base.schemas import Shipment
 
 from .config import Config
-from .requests import create_shipment, rate_shipment
+from .requests import cancel_shipment, create_shipment, rate_shipment
 from .schemas import (
+    CancelShipmentResponse,
     CreateShipmentRequest,
     CreateShipmentResponse,
     RateShipmentRequest,
@@ -63,3 +64,12 @@ class Client(BaseClient):
             request_option="Shop",
         )
         return RateShipmentResponse(data=response.json())
+
+    def cancel_shipment(self, tracking_id: str) -> CancelShipmentResponse:
+        response = cancel_shipment(
+            base_url=self.config.base_url,
+            headers=self.headers,
+            auth=self.config.auth,
+            shipment_id=tracking_id,
+        )
+        return CancelShipmentResponse(data=response.json())

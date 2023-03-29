@@ -19,3 +19,10 @@ def test_create_shipment(austrian_address_1, german_address_1):
     assert result
     assert result.tracking_id.startswith("1Z")
     assert result.label_as_bytes.startswith(b"GIF")
+
+
+def test_cancel_shipment(austrian_address_1, german_address_1):
+    shipment_id = "1Z2220060290602143"  # provided by UPS for test system
+    ups_client = UPSClient()
+    result = ups_client.cancel_shipment(shipment_id)
+    assert result.cancellation_successful
