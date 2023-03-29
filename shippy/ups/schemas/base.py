@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 from shippy.base.schemas import Address as BaseAddress
 
@@ -31,6 +31,15 @@ class Address(BaseModel):
             CountryCode=address.countryCode,
             StateProvinceCode=address.provinceCode,
         )
+
+    @validator("AddressLine")
+    def validate_address_line_entry(cls, address_line):
+        for entry in address_line:
+            if len(entry) > 35:
+                raise ValueError(
+                    f'AddressLine entry "{entry}" is longer than 35 characters'
+                )
+        return address_line
 
 
 class BillShipper(BaseModel):
