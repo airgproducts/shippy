@@ -1,4 +1,6 @@
+from abc import abstractmethod
 from datetime import datetime
+import enum
 
 from shippy.base.client import BaseClient
 from shippy.base.schemas import Shipment
@@ -17,8 +19,10 @@ from .schemas import (
     RateShipmentResponse,
 )
 
+class GlsServices(str, enum.Enum):
+    gls = "GLS"
 
-class Client(BaseClient):
+class Client(BaseClient[GlsServices]):
     config: Config
 
     def __init__(self, config: Config | None = None):
@@ -30,8 +34,8 @@ class Client(BaseClient):
             "Content-Type": "application/glsVersion1+json",
             "Accept": "application/glsVersion1+json, application/json",
         }
-
-    def ship(self, shipment: Shipment) -> CreateShipmentResponse:
+    
+    def ship(self, shipment: Shipment, service=GlsServices.gls) -> CreateShipmentResponse:
         schema = CreateShipmentRequest.from_generic_schemas(
             shipment_reference=shipment.reference,
             contact_id=self.config.contact_id,

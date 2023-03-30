@@ -46,7 +46,7 @@ class BillingWeight(BaseModel):
     Weight: str
 
 
-class TransportationCharges(BaseModel):
+class TransportationCharge(BaseModel):
     CurrencyCode: str
     MonetaryValue: str
 
@@ -59,9 +59,9 @@ class RatedShipment(BaseModel):
     Service: Service
     RatedShipmentAlert: list[RatedShipmentAlert]
     BillingWeight: BillingWeight
-    TransportationCharges: TransportationCharges
-    ServiceOptionsCharges: TransportationCharges
-    TotalCharges: TransportationCharges
+    TransportationCharges: TransportationCharge
+    ServiceOptionsCharges: TransportationCharge
+    TotalCharges: TransportationCharge
     RatedPackage: RatedPackage
 
 

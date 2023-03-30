@@ -14,7 +14,7 @@ from .schemas import (
 )
 
 
-class Client(BaseClient):
+class Client(BaseClient[ServiceCodeEnum]):
     config: Config
 
     def __init__(self, config: Config | None = None):
