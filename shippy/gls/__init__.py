@@ -1,2 +1,2 @@
-from .client import Client
+from .client import GLSClient
 from .utils import get_tracking_link

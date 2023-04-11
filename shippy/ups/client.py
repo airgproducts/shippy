@@ -11,11 +11,11 @@ from .schemas import (
     CreateShipmentResponse,
     RateShipmentRequest,
     RateShipmentResponse,
-    ServiceCodeEnum,
+    ServiceEnum,
 )
 
 
-class Client(BaseClient):
+class UPSClient(BaseClient):
     config: Config
 
     def __init__(self, config: Config | None = None):
@@ -31,16 +31,14 @@ class Client(BaseClient):
             "Password": self.config.password,
         }
 
-    def ship(
-        self, shipment: Shipment, service_code: ServiceCodeEnum
-    ) -> CreateShipmentResponse:
+    def ship(self, shipment: Shipment, service: ServiceEnum) -> CreateShipmentResponse:
         schema = CreateShipmentRequest.from_generic_schemas(
             shipment_reference=shipment.reference,
             parcel=shipment.parcel,
             to_address=shipment.to_address,
             from_address=shipment.from_address,
             account_number=self.config.account_number,
-            service_code=service_code,
+            service_code=service,
         )
         response = create_shipment(
             base_url=self.config.base_url,

@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel
 
-from shippy.ups.schemas.base import ServiceCodeEnum
+from shippy.ups.schemas.base import ServiceEnum
 
 
 class ResponseStatus(BaseModel):
@@ -83,9 +83,9 @@ class RateShipmentResponse(BaseModel):
     data: RateShipmentResponseData
 
     @property
-    def service_prices(self) -> dict[ServiceCodeEnum, ServicePrice]:
+    def service_prices(self) -> dict[ServiceEnum, ServicePrice]:
         return {
-            ServiceCodeEnum(entry.Service.Code): ServicePrice(
+            ServiceEnum(entry.Service.Code): ServicePrice(
                 currency_code=entry.TotalCharges.CurrencyCode,
                 value=entry.TotalCharges.MonetaryValue,
             )

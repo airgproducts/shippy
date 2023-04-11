@@ -1,6 +1,6 @@
 from shippy import UPSClient
 from shippy.base.schemas import Parcel, Shipment
-from shippy.ups.schemas import ServiceCodeEnum
+from shippy.ups.schemas import ServiceEnum
 from shippy.ups.schemas.rateShipmentResponse import ServicePrice
 
 
@@ -17,6 +17,6 @@ def test_rate_shipment(austrian_address_1, german_address_1):
 
     result = ups_client.rate(shipment)
     assert result
-    assert isinstance(result.service_prices[ServiceCodeEnum.UPS_STANDARD], ServicePrice)
-    assert isinstance(result.service_prices[ServiceCodeEnum.UPS_SAVER], ServicePrice)
-    assert isinstance(result.service_prices[ServiceCodeEnum.UPS_EXPRESS], ServicePrice)
+    assert isinstance(result.service_prices[ServiceEnum.UPS_STANDARD], ServicePrice)
+    assert isinstance(result.service_prices[ServiceEnum.UPS_SAVER], ServicePrice)
+    assert isinstance(result.service_prices[ServiceEnum.UPS_EXPRESS], ServicePrice)

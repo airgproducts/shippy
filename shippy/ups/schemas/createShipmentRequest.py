@@ -13,7 +13,7 @@ from .base import (
     DimWeightUnitOfMeasurement,
     PackageWeight,
     PackageWeightUnitOfMeasurement,
-    ServiceCodeEnum,
+    ServiceEnum,
     ShipmentCharge,
 )
 
@@ -94,7 +94,7 @@ class ReferenceNumber(BaseModel):
 
 
 class Service(BaseModel):
-    Code: ServiceCodeEnum
+    Code: ServiceEnum
     Description: str | None = Field(None, max_length=35)
 
 
@@ -150,7 +150,7 @@ class CreateShipmentRequest(BaseModel):
         parcel: BaseParcel,
         to_address: BaseAddress,
         from_address: BaseAddress,
-        service_code: ServiceCodeEnum,
+        service_code: ServiceEnum,
     ):
         return cls(
             ShipmentRequest=ShipmentRequest(

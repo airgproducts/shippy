@@ -1,4 +1,4 @@
-from .base import ServiceCodeEnum
+from .base import ServiceEnum
 from .cancelShipmentResponse import CancelShipmentResponse
 from .createShipmentRequest import CreateShipmentRequest
 from .createShipmentResponse import CreateShipmentResponse
