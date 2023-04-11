@@ -6,6 +6,8 @@ from pydantic import HttpUrl
 from requests import Response
 from requests.auth import HTTPBasicAuth
 
+from shippy.base.errors import ShippyAPIError
+
 from .schemas import CreateShipmentRequest, RateShipmentRequest
 
 _REQUEST_OPTION_CHOICES = Literal["Rate", "Shop"]
@@ -17,7 +19,7 @@ def handle_ups_response(response: Response) -> Response:
             message = response.json()
         except JSONDecodeError:
             message = response.content
-        raise ValueError(
+        raise ShippyAPIError(
             f"UPS create shipment request failed with {response.status_code}: {message}"
         )
     return response
