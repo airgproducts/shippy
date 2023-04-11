@@ -3,6 +3,8 @@ from pydantic import HttpUrl
 from requests import Response
 from requests.auth import HTTPBasicAuth
 
+from shippy.base.errors import ShippyAPIError
+
 from .schemas import CreateShipmentRequest, RateShipmentRequest
 
 
@@ -14,7 +16,7 @@ def handle_gls_response(response: Response, error_message: str) -> Response:
             message = str(response.headers)
         if response.text:
             message += " " + response.text
-        raise ValueError(f"{error_message} {response.status_code}: {message}")
+        raise ShippyAPIError(f"{error_message} {response.status_code}: {message}")
     return response
 
 

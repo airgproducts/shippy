@@ -17,6 +17,7 @@ from .schemas import (
 
 class UPSClient(BaseClient):
     config: Config
+    name = "UPS"
 
     def __init__(self, config: Config | None = None):
         super().__init__(config, Config)
@@ -71,3 +72,9 @@ class UPSClient(BaseClient):
             shipment_id=tracking_id,
         )
         return CancelShipmentResponse(data=response.json())
+
+    @staticmethod
+    def get_tracking_link(tracking_id: str):
+        return (
+            f"http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums={tracking_id}"
+        )
