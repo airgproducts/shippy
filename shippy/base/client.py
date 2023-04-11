@@ -8,6 +8,7 @@ from .schemas import Shipment
 
 class BaseClient(ABC):
     config: BaseConfig
+    name: str
 
     def __init__(self, config: BaseConfig | None, config_model: type(BaseConfig)):
         if config is None:
@@ -26,4 +27,9 @@ class BaseClient(ABC):
 
     @abstractmethod
     def cancel_shipment(self, tracking_id: str) -> CancelShipmentResponseBase:
+        raise NotImplementedError()
+
+    @staticmethod
+    @abstractmethod
+    def get_tracking_link(tracking_id: str) -> str:
         raise NotImplementedError()

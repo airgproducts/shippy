@@ -21,6 +21,7 @@ from .schemas import (
 
 class GLSClient(BaseClient):
     config: Config
+    name = "GLS"
 
     def __init__(self, config: Config | None = None):
         super().__init__(config, Config)
@@ -73,3 +74,7 @@ class GLSClient(BaseClient):
             parcel_id=tracking_id,
         )
         return CancelShipmentResponse(data=response.json())
+
+    @staticmethod
+    def get_tracking_link(tracking_id: str) -> str:
+        return f"https://gls-group.eu/track/{tracking_id}"
