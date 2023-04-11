@@ -73,7 +73,7 @@ class DimWeight(BaseModel):
     # TODO: validate weight string
 
 
-class ServiceCodeEnum(str, Enum):
+class ServiceEnum(str, Enum):
     UPS_NEXT_DAY_AIR = "01"
     UPS_SECOND_DAY_AIR = "02"
     UPS_GROUND = "03"

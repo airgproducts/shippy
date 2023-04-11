@@ -15,10 +15,11 @@ from .schemas import (
     CreateShipmentResponse,
     RateShipmentRequest,
     RateShipmentResponse,
+    ServiceEnum,
 )
 
 
-class Client(BaseClient):
+class GLSClient(BaseClient):
     config: Config
 
     def __init__(self, config: Config | None = None):
@@ -31,7 +32,11 @@ class Client(BaseClient):
             "Accept": "application/glsVersion1+json, application/json",
         }
 
-    def ship(self, shipment: Shipment) -> CreateShipmentResponse:
+    def ship(
+        self,
+        shipment: Shipment,
+        service: ServiceEnum = ServiceEnum.GLS_STANDARD,
+    ) -> CreateShipmentResponse:
         schema = CreateShipmentRequest.from_generic_schemas(
             shipment_reference=shipment.reference,
             contact_id=self.config.contact_id,

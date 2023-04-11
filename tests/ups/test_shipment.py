@@ -1,6 +1,6 @@
 from shippy import UPSClient
 from shippy.base.schemas import Parcel, Shipment
-from shippy.ups.schemas import ServiceCodeEnum
+from shippy.ups.schemas import ServiceEnum
 
 
 def test_create_shipment(austrian_address_1, german_address_1):
@@ -15,7 +15,14 @@ def test_create_shipment(austrian_address_1, german_address_1):
         reference=shipment_reference,
     )
 
-    result = ups_client.ship(shipment, ServiceCodeEnum.UPS_STANDARD)
+    result = ups_client.ship(shipment, ServiceEnum.UPS_STANDARD)
     assert result
     assert result.tracking_id.startswith("1Z")
     assert result.label_as_bytes.startswith(b"GIF")
+
+
+def test_cancel_shipment(austrian_address_1, german_address_1):
+    shipment_id = "1Z2220060290602143"  # provided by UPS for test system
+    ups_client = UPSClient()
+    result = ups_client.cancel_shipment(shipment_id)
+    assert result.cancellation_successful

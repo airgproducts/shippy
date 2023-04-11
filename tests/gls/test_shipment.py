@@ -29,7 +29,8 @@ def test_cancel_parcel(austrian_address_1, austrian_address_2):
         parcel=parcel,
         reference=shipment_reference,
     )
-    result = gls_client.ship(shipment)
+    result_shipment = gls_client.ship(shipment)
 
-    response = gls_client.cancel_shipment(result.tracking_id)
-    assert response.data.TrackID == result.tracking_id
+    result_cancel = gls_client.cancel_shipment(result_shipment.tracking_id)
+    assert result_cancel.data.TrackID == result_shipment.tracking_id
+    assert result_cancel.cancellation_successful

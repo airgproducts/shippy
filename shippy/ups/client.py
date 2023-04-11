@@ -4,17 +4,18 @@ from shippy.base.client import BaseClient
 from shippy.base.schemas import Shipment
 
 from .config import Config
-from .requests import create_shipment, rate_shipment
+from .requests import cancel_shipment, create_shipment, rate_shipment
 from .schemas import (
+    CancelShipmentResponse,
     CreateShipmentRequest,
     CreateShipmentResponse,
     RateShipmentRequest,
     RateShipmentResponse,
-    ServiceCodeEnum,
+    ServiceEnum,
 )
 
 
-class Client(BaseClient):
+class UPSClient(BaseClient):
     config: Config
 
     def __init__(self, config: Config | None = None):
@@ -30,16 +31,14 @@ class Client(BaseClient):
             "Password": self.config.password,
         }
 
-    def ship(
-        self, shipment: Shipment, service_code: ServiceCodeEnum
-    ) -> CreateShipmentResponse:
+    def ship(self, shipment: Shipment, service: ServiceEnum) -> CreateShipmentResponse:
         schema = CreateShipmentRequest.from_generic_schemas(
             shipment_reference=shipment.reference,
             parcel=shipment.parcel,
             to_address=shipment.to_address,
             from_address=shipment.from_address,
             account_number=self.config.account_number,
-            service_code=service_code,
+            service_code=service,
         )
         response = create_shipment(
             base_url=self.config.base_url,
@@ -63,3 +62,12 @@ class Client(BaseClient):
             request_option="Shop",
         )
         return RateShipmentResponse(data=response.json())
+
+    def cancel_shipment(self, tracking_id: str) -> CancelShipmentResponse:
+        response = cancel_shipment(
+            base_url=self.config.base_url,
+            headers=self.headers,
+            auth=self.config.auth,
+            shipment_id=tracking_id,
+        )
+        return CancelShipmentResponse(data=response.json())

@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 
 from .config import BaseConfig
-from .models import CreateShipmentResponseBase
+from .models import CancelShipmentResponseBase, CreateShipmentResponseBase
 from .schemas import Shipment
 
 
@@ -20,5 +21,9 @@ class BaseClient(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def ship(self, shipment: Shipment, *args, **kwargs) -> CreateShipmentResponseBase:
+    def ship(self, shipment: Shipment, service: Enum) -> CreateShipmentResponseBase:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def cancel_shipment(self, tracking_id: str) -> CancelShipmentResponseBase:
         raise NotImplementedError()

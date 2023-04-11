@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 from typing import Literal
 
 import requests
@@ -12,8 +13,12 @@ _REQUEST_OPTION_CHOICES = Literal["Rate", "Shop"]
 
 def handle_ups_response(response: Response) -> Response:
     if response.status_code != 200:
+        try:
+            message = response.json()
+        except JSONDecodeError:
+            message = response.content
         raise ValueError(
-            f"UPS create shipment request failed with {response.status_code}: {response.json()}"
+            f"UPS create shipment request failed with {response.status_code}: {message}"
         )
     return response
 
@@ -46,6 +51,22 @@ def rate_shipment(
         base_url + sub_url,
         headers=headers,
         json=schema.dict(exclude_none=True),
+        auth=auth,
+    )
+    return handle_ups_response(response)
+
+
+def cancel_shipment(
+    base_url: HttpUrl,
+    headers: dict[str, str],
+    auth: HTTPBasicAuth,
+    shipment_id: str,
+):
+    sub_url = f"/shipments/cancel/{shipment_id}"
+    print(base_url + sub_url)
+    response = requests.delete(
+        base_url + sub_url,
+        headers=headers,
         auth=auth,
     )
     return handle_ups_response(response)
