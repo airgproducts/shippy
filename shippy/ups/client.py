@@ -31,21 +31,29 @@ class UPSClient(BaseClient):
             "Username": self.config.user,
             "Password": self.config.password,
         }
+    
+    def create_shipment_request(self, shipment: Shipment, service: ServiceEnum) -> CreateShipmentRequest:
+        return CreateShipmentRequest.from_generic_schemas(
+                shipment_reference=shipment.reference,
+                parcel=shipment.parcel,
+                to_address=shipment.to_address,
+                from_address=shipment.from_address,
+                account_number=self.config.account_number,
+                service_code=service,
+            )
 
-    def ship(self, shipment: Shipment, service: ServiceEnum) -> CreateShipmentResponse:
-        schema = CreateShipmentRequest.from_generic_schemas(
-            shipment_reference=shipment.reference,
-            parcel=shipment.parcel,
-            to_address=shipment.to_address,
-            from_address=shipment.from_address,
-            account_number=self.config.account_number,
-            service_code=service,
-        )
+
+    def ship(self, shipment: Shipment | CreateShipmentRequest, service: ServiceEnum) -> CreateShipmentResponse:
+        if isinstance(shipment, CreateShipmentRequest):
+            ups_schema = shipment
+        else:
+            ups_schema = self.create_shipment_request(shipment, service)
+
         response = create_shipment(
             base_url=self.config.base_url,
             headers=self.headers,
             auth=self.config.auth,
-            schema=schema,
+            schema=ups_schema,
         )
         return CreateShipmentResponse(data=response.json())
 

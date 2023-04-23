@@ -4,6 +4,10 @@
 3. From now on use `poetry run myfile.py` or simply `poetry shell` to run python scripts
 4. Install pre-commit hooks with `poetry run pre-commit install`
 
+# Testing
+
+create a .env file with your credentials to test
+
 # Usage
 TODO
 
