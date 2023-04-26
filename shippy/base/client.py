@@ -10,7 +10,7 @@ class BaseClient(ABC):
     config: BaseConfig
     name: str
 
-    def __init__(self, config: BaseConfig | None, config_model: type(BaseConfig)):
+    def __init__(self, config: BaseConfig | None, config_model: type[BaseConfig]):
         if config is None:
             config = config_model()
         self.config = config

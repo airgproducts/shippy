@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -89,6 +90,22 @@ class PaymentInformation(BaseModel):
     ShipmentCharge: ShipmentCharge
 
 
+class DeliveryConfirmation(BaseModel):
+    DCISType: Literal[0, 1]
+
+class ShipmentServiceOptions(BaseModel):
+    DeliveryConfirmation: DeliveryConfirmation | None = None
+
+    def require_signature(self, adult=False) -> ShipmentServiceOptions:
+        dcis = 0
+        if adult:
+            dcis = 1
+        
+        self.DeliveryConfirmation = DeliveryConfirmation(DCISType=dcis)
+
+        return self
+
+
 class ReferenceNumber(BaseModel):
     Value: str = Field(..., max_length=35)
 
@@ -133,6 +150,7 @@ class Shipment(BaseModel):
     ReferenceNumber: ReferenceNumber
     Service: Service
     Package: Package
+    ShipmentServiceOptions: ShipmentServiceOptions = Field(default_factory=ShipmentServiceOptions)
 
 
 class ShipmentRequest(BaseModel):

@@ -7,7 +7,11 @@ from shippy.base.schemas import Address as BaseAddress
 
 _PACKAGE_WEIGHT_UNIT_OF_MEASUREMENT_CHOICES = Literal["LBS", "KGS", "OZS"]
 _DIM_WEIGHT_UNIT_OF_MEASUREMENT_CHOICES = Literal["LBS", "KGS"]
-_PAYMENT_INFORMATION_TYPE_CHOICES = Literal["01", "02", "03"]
+_PAYMENT_INFORMATION_TYPE_CHOICES = Literal[
+    "01", # Transportation
+    "02", # Duties and Taxes
+    "03"  # Broker of Choice
+]
 
 
 class Address(BaseModel):
