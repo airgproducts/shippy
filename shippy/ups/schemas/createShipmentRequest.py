@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from shippy.base.schemas import Address as BaseAddress
 from shippy.base.schemas import Parcel as BaseParcel
 from shippy.ups.utils import calculate_dim_weight_from_volume
+from shippy.ups.config import Config
 
 from .base import (
     Address,
@@ -127,7 +128,7 @@ class Package(BaseModel):
     PackageWeight: PackageWeight
 
     @classmethod
-    def from_generic_parcel(cls, parcel: BaseParcel):
+    def from_generic_parcel(cls, parcel: BaseParcel, config: Config):
         return cls(
             Description=parcel.description,
             Packaging=Packaging(Code="02"),
@@ -137,7 +138,7 @@ class Package(BaseModel):
             ),
             DimWeight=DimWeight(
                 UnitOfMeasurement=DimWeightUnitOfMeasurement(Code=parcel.unit_weight),
-                Weight=calculate_dim_weight_from_volume(parcel.volume),
+                Weight=calculate_dim_weight_from_volume(parcel.volume, config),
             ),
         )
 
@@ -163,32 +164,32 @@ class CreateShipmentRequest(BaseModel):
     @classmethod
     def from_generic_schemas(
         cls,
-        account_number: str,
         shipment_reference: str,
         parcel: BaseParcel,
         to_address: BaseAddress,
         from_address: BaseAddress,
         service_code: ServiceEnum,
+        config: Config,
     ):
         return cls(
             ShipmentRequest=ShipmentRequest(
                 Shipment=Shipment(
                     Description="description",
                     Shipper=Shipper.from_generic_address(
-                        address=from_address, shipper_number=account_number
+                        address=from_address, shipper_number=config.account_number
                     ),
                     ShipTo=ShipTo.from_generic_address(address=to_address),
                     PaymentInformation=PaymentInformation(
                         ShipmentCharge=ShipmentCharge(
                             Type="01",
                             BillShipper=BillShipper(
-                                AccountNumber=account_number,
+                                AccountNumber=config.account_number,
                             ),
                         ),
                     ),
                     ReferenceNumber=ReferenceNumber(Value=shipment_reference),
                     Service=Service(Code=service_code, Description="UPS Standard"),
-                    Package=Package.from_generic_parcel(parcel),
+                    Package=Package.from_generic_parcel(parcel=parcel, config=config),
                 )
             )
         )

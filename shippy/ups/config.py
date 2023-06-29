@@ -9,3 +9,4 @@ class Config(BaseSettings, BaseConfig):
     base_url: HttpUrl = Field(..., env="SHIPPY_UPS_BASE_URL")
     key: str = Field(..., env="SHIPPY_UPS_KEY")
     account_number: str = Field(..., env="SHIPPY_UPS_ACCOUNT_NUMBER")
+    volume_weight_factor: float = Field(0.2, env="SHIPPY_UPS_VOLUME_WEIGHT_FACTOR")

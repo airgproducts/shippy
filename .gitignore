@@ -4,6 +4,9 @@
 # temporary files
 temp/
 
+#local files
+local/
+
 # env variables
 .env
 .env.**

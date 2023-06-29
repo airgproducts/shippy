@@ -65,7 +65,6 @@ def cancel_shipment(
     shipment_id: str,
 ):
     sub_url = f"/shipments/cancel/{shipment_id}"
-    print(base_url + sub_url)
     response = requests.delete(
         base_url + sub_url,
         headers=headers,
