@@ -57,7 +57,7 @@ class RatedPackage(BaseModel):
 
 class RatedShipment(BaseModel):
     Service: Service
-    RatedShipmentAlert: list[RatedShipmentAlert]
+    RatedShipmentAlert: list[RatedShipmentAlert] | RatedShipmentAlert
     BillingWeight: BillingWeight
     TransportationCharges: TransportationCharges
     ServiceOptionsCharges: TransportationCharges

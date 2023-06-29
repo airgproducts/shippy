@@ -38,10 +38,9 @@ class UPSClient(BaseClient):
                 parcel=shipment.parcel,
                 to_address=shipment.to_address,
                 from_address=shipment.from_address,
-                account_number=self.config.account_number,
                 service_code=service,
+                config=self.config,
             )
-
 
     def ship(self, shipment: Shipment | CreateShipmentRequest, service: ServiceEnum) -> CreateShipmentResponse:
         if isinstance(shipment, CreateShipmentRequest):
@@ -62,6 +61,7 @@ class UPSClient(BaseClient):
             parcel=shipment.parcel,
             to_address=shipment.to_address,
             from_address=shipment.from_address,
+            config=self.config,
         )
         response = rate_shipment(
             base_url=self.config.base_url,
