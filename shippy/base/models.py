@@ -2,12 +2,12 @@ import base64
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-from pydantic.generics import GenericModel
+from pydantic import BaseModel
 
 DataType = TypeVar("DataType")
 
 
-class CreateShipmentResponseBase(GenericModel, Generic[DataType], ABC):
+class CreateShipmentResponseBase(BaseModel, Generic[DataType], ABC):
     data: DataType
 
     @property
@@ -29,7 +29,7 @@ class CreateShipmentResponseBase(GenericModel, Generic[DataType], ABC):
         return self._label
 
 
-class CancelShipmentResponseBase(GenericModel, Generic[DataType], ABC):
+class CancelShipmentResponseBase(BaseModel, Generic[DataType], ABC):
     data: DataType
 
     @property

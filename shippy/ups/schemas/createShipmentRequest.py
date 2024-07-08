@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 from typing import Literal
 
 from pydantic import BaseModel, Field
 
 from shippy.base.schemas import Address as BaseAddress
 from shippy.base.schemas import Parcel as BaseParcel
-from shippy.ups.utils import calculate_dim_weight_from_volume
 from shippy.ups.config import Config
+from shippy.ups.utils import calculate_dim_weight_from_volume
 
 from .base import (
     Address,
@@ -94,15 +95,18 @@ class PaymentInformation(BaseModel):
 class DeliveryConfirmation(BaseModel):
     DCISType: Literal[0, 1]
 
+
 class ShipmentServiceOptions(BaseModel):
-    DeliveryConfirmation: DeliveryConfirmation | None = None
+    delivery_confirmation: DeliveryConfirmation | None = Field(
+        None, alias="DeliveryConfirmation"
+    )
 
     def require_signature(self, adult=False) -> ShipmentServiceOptions:
         dcis = 0
         if adult:
             dcis = 1
-        
-        self.DeliveryConfirmation = DeliveryConfirmation(DCISType=dcis)
+
+        self.delivery_confirmation = DeliveryConfirmation(DCISType=dcis)
 
         return self
 
@@ -145,13 +149,15 @@ class Package(BaseModel):
 
 class Shipment(BaseModel):
     Description: str = Field(..., max_length=50)
-    Shipper: Shipper
-    ShipTo: ShipTo
-    PaymentInformation: PaymentInformation
-    ReferenceNumber: ReferenceNumber
-    Service: Service
-    Package: Package
-    ShipmentServiceOptions: ShipmentServiceOptions = Field(default_factory=ShipmentServiceOptions)
+    shipper: Shipper = Field(..., alias="Shipper")
+    ship_to: ShipTo = Field(..., alias="ShipTo")
+    payment_information: PaymentInformation = Field(..., alias="PaymentInformation")
+    reference_number: ReferenceNumber = Field(..., alias="ReferenceNumber")
+    service: Service = Field(..., alias="Service")
+    package: Package = Field(..., alias="Package")
+    shipment_service_options: ShipmentServiceOptions = Field(
+        default_factory=ShipmentServiceOptions, alias="ShipmentServiceOptions"
+    )
 
 
 class ShipmentRequest(BaseModel):

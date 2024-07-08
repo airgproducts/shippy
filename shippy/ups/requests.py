@@ -33,9 +33,9 @@ def create_shipment(
 ):
     sub_url = "/shipments"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
-        json=schema.dict(exclude_none=True),
+        json=schema.model_dump(exclude_none=True, by_alias=True),
         auth=auth,
     )
     return handle_ups_response(response)
@@ -50,9 +50,9 @@ def rate_shipment(
 ):
     sub_url = f"/rating/{request_option}"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
-        json=schema.dict(exclude_none=True),
+        json=schema.model_dump(exclude_none=True, by_alias=True),
         auth=auth,
     )
     return handle_ups_response(response)
@@ -66,7 +66,7 @@ def cancel_shipment(
 ):
     sub_url = f"/shipments/cancel/{shipment_id}"
     response = requests.delete(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
         auth=auth,
     )
