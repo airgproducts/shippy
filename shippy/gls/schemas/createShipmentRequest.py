@@ -76,13 +76,13 @@ class ReturnLabels(BaseModel):
 
 
 class PrintingOptionsSchema(BaseModel):
-    ReturnLabels: ReturnLabels = ReturnLabels()
+    return_labels: ReturnLabels = Field(ReturnLabels(), alias="ReturnLabels")
 
 
 class CreateShipmentRequest(BaseModel):
     Shipment: Shipment
     PrintingOptions: PrintingOptionsSchema = PrintingOptionsSchema()
-    CustomContent: CustomContent | None
+    custom_content: CustomContent | None = Field(None, alias="CustomContent")
 
     @classmethod
     def from_generic_schemas(

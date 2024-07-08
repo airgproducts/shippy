@@ -1,16 +1,14 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 from shippy.base.schemas import Address as BaseAddress
 
 _PACKAGE_WEIGHT_UNIT_OF_MEASUREMENT_CHOICES = Literal["LBS", "KGS", "OZS"]
 _DIM_WEIGHT_UNIT_OF_MEASUREMENT_CHOICES = Literal["LBS", "KGS"]
 _PAYMENT_INFORMATION_TYPE_CHOICES = Literal[
-    "01", # Transportation
-    "02", # Duties and Taxes
-    "03"  # Broker of Choice
+    "01", "02", "03"  # Transportation  # Duties and Taxes  # Broker of Choice
 ]
 
 
@@ -36,7 +34,7 @@ class Address(BaseModel):
             StateProvinceCode=address.provinceCode,
         )
 
-    @validator("AddressLine")
+    @field_validator("AddressLine")
     def validate_address_line_entry(cls, address_line):
         for entry in address_line:
             if len(entry) > 35:
