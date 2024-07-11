@@ -1,10 +1,9 @@
 from pydantic import Field, HttpUrl
-from pydantic_settings import BaseSettings
 
 from shippy.base.config import BaseConfig
 
 
-class Config(BaseSettings, BaseConfig):
+class Config(BaseConfig):
     user: str = Field(..., validation_alias="SHIPPY_UPS_USERNAME")
     password: str = Field(..., validation_alias="SHIPPY_UPS_PASSWORD")
     base_url: HttpUrl = Field(..., validation_alias="SHIPPY_UPS_BASE_URL")
