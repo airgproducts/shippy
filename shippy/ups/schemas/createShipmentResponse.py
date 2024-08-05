@@ -70,7 +70,7 @@ class ShipmentResults(BaseModel):
     ShipmentCharges: ShipmentCharges
     BillingWeight: BillingWeight
     ShipmentIdentificationNumber: str = Field(..., max_length=18)
-    PackageResults: PackageResults
+    PackageResults: list[PackageResults]
 
 
 class ShipmentResponse(BaseModel):
@@ -85,10 +85,10 @@ class CreateShipmentResponseData(BaseModel):
 class CreateShipmentResponse(CreateShipmentResponseBase[CreateShipmentResponseData]):
     @property
     def tracking_id(self) -> str:
-        return self.data.ShipmentResponse.ShipmentResults.PackageResults.TrackingNumber
+        return self.data.ShipmentResponse.ShipmentResults.PackageResults[0].TrackingNumber
 
     @property
     def _label(self) -> str:
-        return (
-            self.data.ShipmentResponse.ShipmentResults.PackageResults.ShippingLabel.GraphicImage
-        )
+        return self.data.ShipmentResponse.ShipmentResults.PackageResults[
+            0
+        ].ShippingLabel.GraphicImage
