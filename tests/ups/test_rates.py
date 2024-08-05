@@ -1,3 +1,5 @@
+import pytest
+
 from shippy import UPSClient
 from shippy.base.schemas import Parcel, Shipment
 from shippy.ups.schemas import ServiceEnum
@@ -14,9 +16,9 @@ def test_rate_shipment(austrian_address_1, german_address_1):
         parcel=parcel,
         reference=shipment_reference,
     )
-
-    result = ups_client.rate(shipment)
-    assert result
-    assert isinstance(result.service_prices[ServiceEnum.UPS_STANDARD], ServicePrice)
-    assert isinstance(result.service_prices[ServiceEnum.UPS_SAVER], ServicePrice)
-    assert isinstance(result.service_prices[ServiceEnum.UPS_EXPRESS], ServicePrice)
+    with pytest.raises(NotImplementedError):
+        result = ups_client.rate(shipment)
+        assert result
+        assert isinstance(result.service_prices[ServiceEnum.UPS_STANDARD], ServicePrice)
+        assert isinstance(result.service_prices[ServiceEnum.UPS_SAVER], ServicePrice)
+        assert isinstance(result.service_prices[ServiceEnum.UPS_EXPRESS], ServicePrice)

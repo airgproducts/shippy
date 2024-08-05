@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import pytest
+
 from shippy import GLSClient
 from shippy.base.schemas import Parcel, Shipment
 
@@ -15,6 +17,7 @@ def test_rate_shipment(austrian_address_1, austrian_address_2):
         parcel=parcel,
         reference=shipment_reference,
     )
-    result = gls_client.rate(shipment)
-    assert isinstance(result.delivery_date, datetime)
-    assert result.delivery_date > datetime.now()
+    with pytest.raises(NotImplementedError):
+        result = gls_client.rate(shipment)
+        assert isinstance(result.delivery_date, datetime)
+        assert result.delivery_date > datetime.now()

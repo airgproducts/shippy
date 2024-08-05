@@ -2,5 +2,7 @@ from .base import ServiceEnum
 from .cancelShipmentResponse import CancelShipmentResponse
 from .createShipmentRequest import CreateShipmentRequest
 from .createShipmentResponse import CreateShipmentResponse
+from .createTokenRequest import CreateTokenRequest
+from .createTokenResponse import CreateTokenResponse
 from .rateShipmentRequest import RateShipmentRequest
 from .rateShipmentResponse import RateShipmentResponse

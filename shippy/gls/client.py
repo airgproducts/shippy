@@ -54,6 +54,8 @@ class GLSClient(BaseClient):
         return CreateShipmentResponse(data=response.json())
 
     def rate(self, shipment: Shipment) -> RateShipmentResponse:
+        # TODO: GLS rating does not work anymore with 404
+        raise NotImplementedError
         schema = RateShipmentRequest.from_generic_schema(
             from_address=shipment.from_address, to_address=shipment.to_address
         )
