@@ -9,6 +9,8 @@ from requests.auth import HTTPBasicAuth
 from shippy.base.errors import ShippyAPIError
 
 from .schemas import CreateShipmentRequest, CreateTokenRequest, RateShipmentRequest
+from .schemas.paperlessDocumentImageRequest import PaperlessDocumentImageRequestSchema
+from .schemas.paperlessDocumentUploadRequest import PaperlessDocumentUploadRequestSchema
 
 _REQUEST_OPTION_CHOICES = Literal["Rate", "Shop"]
 _TIMEOUT = 5
@@ -39,7 +41,6 @@ def create_shipment(
         json=schema.dict(exclude_none=True),
         **_REQUEST_KWARGS,
     )
-    print(response.json())
     return handle_ups_response(response)
 
 
@@ -89,6 +90,38 @@ def create_token(
         headers=headers,
         auth=auth,
         data=schema.dict(exclude_none=True),
+        **_REQUEST_KWARGS,
+    )
+    return handle_ups_response(response)
+
+
+def paperless_document_upload(
+    base_url: HttpUrl,
+    headers: dict[str, str],
+    schema: PaperlessDocumentUploadRequestSchema,
+):
+    sub_url = f"api/paperlessdocuments/v2/upload"
+    headers["ShipperNumber"] = schema.UploadRequest.ShipperNumber
+    response = requests.post(
+        base_url + sub_url,
+        headers=headers,
+        json=schema.dict(exclude_none=True),
+        **_REQUEST_KWARGS,
+    )
+    return handle_ups_response(response)
+
+
+def paperless_document_image(
+    base_url: HttpUrl,
+    headers: dict[str, str],
+    schema: PaperlessDocumentImageRequestSchema,
+):
+    sub_url = f"api/paperlessdocuments/v2/image"
+    headers["ShipperNumber"] = schema.PushToImageRepositoryRequest.ShipperNumber
+    response = requests.post(
+        base_url + sub_url,
+        headers=headers,
+        json=schema.dict(exclude_none=True),
         **_REQUEST_KWARGS,
     )
     return handle_ups_response(response)

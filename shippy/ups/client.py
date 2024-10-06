@@ -1,20 +1,33 @@
+import datetime
 import uuid
-from datetime import datetime
 
 from shippy.base.client import BaseClient
 from shippy.base.schemas import Shipment
 
 from .config import Config
-from .requests import cancel_shipment, create_shipment, create_token, rate_shipment
+from .requests import (
+    cancel_shipment,
+    create_shipment,
+    create_token,
+    paperless_document_image,
+    paperless_document_upload,
+    rate_shipment,
+)
 from .schemas import (
     CancelShipmentResponse,
     CreateShipmentRequest,
     CreateShipmentResponse,
     CreateTokenRequest,
     CreateTokenResponse,
+    ImageFileSchema,
+    PaperlessDocumentImageRequestSchema,
+    PaperlessDocumentImageResponseSchema,
+    PaperlessDocumentUploadRequestSchema,
+    PaperlessDocumentUploadResponseSchema,
     RateShipmentRequest,
     RateShipmentResponse,
     ServiceEnum,
+    UploadFileSchema,
 )
 
 
@@ -27,7 +40,11 @@ class UPSClient(BaseClient):
         super().__init__(config, Config)
 
     def get_bearer_token(self) -> CreateTokenResponse:
-        if self.bearer_token and self.bearer_token.expires_in_datetime > datetime.now():
+        if (
+            self.bearer_token
+            and self.bearer_token.expires_in_datetime
+            > datetime.datetime.now(tz=datetime.UTC)
+        ):
             return self.bearer_token
         token = self.create_token()
         self.bearer_token = token
@@ -102,6 +119,33 @@ class UPSClient(BaseClient):
             account_number=self.config.account_number,
         )
         return CreateTokenResponse(**response.json())
+
+    def paperless_document_upload(
+        self, files: list[UploadFileSchema]
+    ) -> PaperlessDocumentUploadResponseSchema:
+        schema = PaperlessDocumentUploadRequestSchema.create(
+            shipper_number=self.config.account_number, files=files
+        )
+        response = paperless_document_upload(
+            schema=schema,
+            base_url=self.config.base_url,
+            headers=self.headers,
+        )
+        return PaperlessDocumentUploadResponseSchema(**response.json())
+
+    def paperless_document_image(
+        self, data: ImageFileSchema
+    ) -> PaperlessDocumentImageResponseSchema:
+        schema = PaperlessDocumentImageRequestSchema.create(
+            data=data, shipper_number=self.config.account_number
+        )
+        response = paperless_document_image(
+            schema=schema,
+            base_url=self.config.base_url,
+            headers=self.headers,
+        )
+
+        return PaperlessDocumentImageResponseSchema(**response.json())
 
     @staticmethod
     def get_tracking_link(tracking_id: str):

@@ -88,6 +88,10 @@ class CreateShipmentResponse(CreateShipmentResponseBase[CreateShipmentResponseDa
         return self.data.ShipmentResponse.ShipmentResults.PackageResults[0].TrackingNumber
 
     @property
+    def shipping_id(self) -> str:
+        return self.data.ShipmentResponse.ShipmentResults.ShipmentIdentificationNumber
+
+    @property
     def _label(self) -> str:
         return self.data.ShipmentResponse.ShipmentResults.PackageResults[
             0
