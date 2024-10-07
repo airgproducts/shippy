@@ -18,6 +18,7 @@ def check_shipment_response(result: CreateShipmentResponse):
     assert result
     assert result.tracking_id.startswith("1Z")
     assert result.label_as_bytes.startswith(b"GIF")
+    assert isinstance(result.shipping_id, str)
 
 
 def test_create_shipment(austrian_address_1, german_address_1):

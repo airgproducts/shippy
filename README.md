@@ -6,7 +6,8 @@
 
 # Testing
 
-create a .env file with your credentials to test
+- create a .env file with your credentials to test
+- run `pytest tests`
 
 # Usage
 TODO
