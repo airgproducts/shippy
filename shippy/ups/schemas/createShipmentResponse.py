@@ -83,6 +83,8 @@ class CreateShipmentResponseData(BaseModel):
 
 
 class CreateShipmentResponse(CreateShipmentResponseBase[CreateShipmentResponseData]):
+    invoice_upload_success: bool | None = None
+
     @property
     def tracking_id(self) -> str:
         return self.data.ShipmentResponse.ShipmentResults.PackageResults[0].TrackingNumber

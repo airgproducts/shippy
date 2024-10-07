@@ -1,5 +1,4 @@
 from datetime import datetime
-from importlib.metadata import files
 
 from shippy import UPSClient
 from shippy.ups.schemas import (
@@ -48,3 +47,14 @@ def test_image_file(austrian_address_1, german_address_1):
     )
     image_response = ups_client.paperless_document_image(data)
     assert image_response.success
+
+
+def test_upload_and_image_file_in_shipment(austrian_address_1, german_address_1):
+    ups_client = UPSClient()
+
+    shipment_response = ups_client.ship(
+        shipment=create_shipment(austrian_address_1, german_address_1),
+        service=ServiceEnum.UPS_STANDARD,
+        invoice=file_example,
+    )
+    assert shipment_response.invoice_upload_success is True

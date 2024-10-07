@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 from shippy.base.client import BaseClient
+from shippy.base.errors import ShippyAPIError
 from shippy.base.schemas import Shipment
 
 from .config import Config
@@ -71,7 +72,10 @@ class UPSClient(BaseClient):
         )
 
     def ship(
-        self, shipment: Shipment | CreateShipmentRequest, service: ServiceEnum
+        self,
+        shipment: Shipment | CreateShipmentRequest,
+        service: ServiceEnum,
+        invoice: UploadFileSchema | None = None,
     ) -> CreateShipmentResponse:
         if isinstance(shipment, CreateShipmentRequest):
             ups_schema = shipment
@@ -83,7 +87,23 @@ class UPSClient(BaseClient):
             headers=self.headers,
             schema=ups_schema,
         )
-        return CreateShipmentResponse(data=response.json())
+        shipment_response = CreateShipmentResponse(data=response.json())
+
+        if invoice:
+            upload_response = self.paperless_document_upload(files=[invoice])
+            image_response = self.paperless_document_image(
+                data=ImageFileSchema(
+                    document_id=upload_response.document_ids[0],
+                    shipment_datetime=datetime.datetime.now(),
+                    shipment_identifier=shipment_response.shipping_id,
+                    tracking_number=shipment_response.tracking_id,
+                )
+            )
+            if not image_response.success:
+                raise ShippyAPIError(image_response.response_message)
+            shipment_response.invoice_upload_success = True
+
+        return shipment_response
 
     def rate(self, shipment: Shipment) -> RateShipmentResponse:
         # TODO: implement tracking with new UPS api
