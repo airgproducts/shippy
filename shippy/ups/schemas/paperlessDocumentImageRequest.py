@@ -30,7 +30,7 @@ class PushToImageRepositoryRequestSchema(BaseModel):
     Request: RequestSchema
     FormsHistoryDocumentID: FormsHistoryDocumentIDSchema
     ShipmentIdentifier: str
-    ShipmentDateAndTime: str = Field(regex=DATETIME_REGEX)
+    ShipmentDateAndTime: str = Field(pattern=DATETIME_REGEX)
     ShipmentType: Literal["1", "2"]
     TrackingNumber: str
     ShipperNumber: str = Field(..., min_length=6, max_length=6)

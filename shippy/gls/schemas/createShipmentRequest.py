@@ -51,13 +51,13 @@ class Consignee(BaseModel):
 
 
 class ShipmentUnit(BaseModel):
-    ShipmentUnitReference: list[str] | None
+    ShipmentUnitReference: list[str] | None = None
     Weight: float = Field(..., gt=0)
     # TODO: add validation for ShipmentUnitReference
 
 
 class Shipment(BaseModel):
-    ShipmentReference: list[str] | None
+    ShipmentReference: list[str] | None = None
     IncotermCode: _INCOTERM_CODE_CHOICES = "10"
     Product: _PRODUCT_CHOICES
     Shipper: Shipper
