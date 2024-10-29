@@ -151,6 +151,7 @@ class UPSClient(BaseClient):
             base_url=self.config.base_url,
             headers=self.headers,
         )
+        print(response.json())
         return PaperlessDocumentUploadResponseSchema(**response.json())
 
     def paperless_document_image(

@@ -29,9 +29,9 @@ def create_parcels_f114(
     # https://shipit.gls-group.eu/webservices/3_2_9/doxygen/WS-REST-API/rest_shipment_processing.html#REST_API_REST_F_114
     sub_url = "/shipments"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
-        json=schema.dict(exclude_none=True),
+        json=schema.model_dump(exclude_none=True, by_alias=True),
         auth=auth,
     )
     return handle_gls_response(response, "GLS create shipment request failed with")
@@ -46,7 +46,7 @@ def cancel_parcel_by_id_f116(
     # https://shipit.gls-group.eu/webservices/3_2_9/doxygen/WS-REST-API/rest_shipment_processing.html#REST_API_REST_F_116
     sub_url = f"/shipments/cancel/{parcel_id}"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
         auth=auth,
     )
@@ -62,9 +62,9 @@ def get_estimated_delivery_days_f234(
     # https://shipit.gls-group.eu/webservices/3_2_9/doxygen/WS-REST-API/rest_timeframe.html#REST_API_REST_TF_1
     sub_url = f"/timeframe/deliverydays"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
-        json=schema.dict(exclude_none=True),
+        json=schema.model_dump(exclude_none=True, by_alias=True),
         auth=auth,
     )
     return handle_gls_response(response, "GLS get estimated delivery days failed with")

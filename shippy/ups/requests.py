@@ -36,9 +36,9 @@ def create_shipment(
 ):
     sub_url = "api/shipments/v2403/ship"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
-        json=schema.dict(exclude_none=True),
+        json=schema.model_dump(exclude_none=True, by_alias=True),
         **_REQUEST_KWARGS,
     )
     return handle_ups_response(response)
@@ -52,9 +52,9 @@ def rate_shipment(
 ):
     sub_url = f"rating/{request_option}"
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
-        json=schema.dict(exclude_none=True),
+        json=schema.model_dump(exclude_none=True, by_alias=True),
         **_REQUEST_KWARGS,
     )
     return handle_ups_response(response)
@@ -67,7 +67,7 @@ def cancel_shipment(
 ):
     sub_url = f"api/shipments/v2403/void/cancel/{shipment_id}"
     response = requests.delete(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
         **_REQUEST_KWARGS,
     )
@@ -103,7 +103,7 @@ def paperless_document_upload(
     sub_url = f"api/paperlessdocuments/v2/upload"
     headers["ShipperNumber"] = schema.UploadRequest.ShipperNumber
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
         json=schema.dict(exclude_none=True),
         **_REQUEST_KWARGS,
@@ -119,7 +119,7 @@ def paperless_document_image(
     sub_url = f"api/paperlessdocuments/v2/image"
     headers["ShipperNumber"] = schema.PushToImageRepositoryRequest.ShipperNumber
     response = requests.post(
-        base_url + sub_url,
+        str(base_url) + sub_url,
         headers=headers,
         json=schema.dict(exclude_none=True),
         **_REQUEST_KWARGS,

@@ -19,7 +19,7 @@ class TransactionReferenceSchema(BaseModel):
 
 class ResponseSchema(BaseModel):
     ResponseStatus: ResponseStatusSchema
-    Alert: Optional[List[AlertSchema]]
+    Alert: Optional[List[AlertSchema]] = None
     TransactionReference: TransactionReferenceSchema
 
 

@@ -6,11 +6,14 @@
 
 # Testing
 
-- create a .env file with your credentials to test
-- run `pytest tests`
+create a .env file with your credentials to test
+`poetry run pytest`
 
 # Usage
 TODO
+
+# known issues
+FAILED tests/gls/test_rates.py::test_rate_shipment - shippy.base.errors.ShippyAPIError: GLS get estimated delivery days failed with 404: {'Date': 'Mon, 08 Jul 2024 14:32:53 GMT', 'Content-Length': '0', 'Connection': 'keep-alive', 'serverExecutionTime': '0'}
 
 
 # Resources

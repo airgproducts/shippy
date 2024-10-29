@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 _PARCEL_WEIGHT_UNIT_CHOICES = Literal["LBS", "KGS", "OZS"]
 _PARCEL_VOLUME_UNIT_CHOICES = Literal["L"]
@@ -19,7 +19,7 @@ class Address(BaseModel):
     email: str | None = None
     phone: str
 
-    @validator("*")
+    @field_validator("*")
     def empty_str_to_none(cls, v):
         if v == "":
             return None

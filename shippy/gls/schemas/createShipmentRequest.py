@@ -51,13 +51,13 @@ class Consignee(BaseModel):
 
 
 class ShipmentUnit(BaseModel):
-    ShipmentUnitReference: list[str] | None
+    ShipmentUnitReference: list[str] | None = None
     Weight: float = Field(..., gt=0)
     # TODO: add validation for ShipmentUnitReference
 
 
 class Shipment(BaseModel):
-    ShipmentReference: list[str] | None
+    ShipmentReference: list[str] | None = None
     IncotermCode: _INCOTERM_CODE_CHOICES = "10"
     Product: _PRODUCT_CHOICES
     Shipper: Shipper
@@ -76,13 +76,13 @@ class ReturnLabels(BaseModel):
 
 
 class PrintingOptionsSchema(BaseModel):
-    ReturnLabels: ReturnLabels = ReturnLabels()
+    return_labels: ReturnLabels = Field(ReturnLabels(), alias="ReturnLabels")
 
 
 class CreateShipmentRequest(BaseModel):
     Shipment: Shipment
     PrintingOptions: PrintingOptionsSchema = PrintingOptionsSchema()
-    CustomContent: CustomContent | None
+    custom_content: CustomContent | None = Field(None, alias="CustomContent")
 
     @classmethod
     def from_generic_schemas(

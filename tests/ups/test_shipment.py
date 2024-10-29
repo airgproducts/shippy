@@ -35,12 +35,12 @@ def test_create_shipment_with_signature(austrian_address_1, german_address_1):
     request = ups_client.create_shipment_request(shipment, ServiceEnum.UPS_STANDARD)
 
     assert (
-        request.ShipmentRequest.Shipment.ShipmentServiceOptions.DeliveryConfirmation
+        request.ShipmentRequest.Shipment.shipment_service_options.delivery_confirmation
         is None
     )
-    request.ShipmentRequest.Shipment.ShipmentServiceOptions.require_signature()
+    request.ShipmentRequest.Shipment.shipment_service_options.require_signature()
     assert (
-        request.ShipmentRequest.Shipment.ShipmentServiceOptions.DeliveryConfirmation
+        request.ShipmentRequest.Shipment.shipment_service_options.delivery_confirmation
         is not None
     )
 
